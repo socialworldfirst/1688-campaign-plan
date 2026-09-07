@@ -88,8 +88,10 @@ function renderBlock(b) {
       els.push(h2(`${b.id} · ${b.title}`));
       els.push(cue(b.track + (b.time ? ` · ${b.time}` : "")));
       if (b.coldopen) { els.push(label("On screen")); els.push(cue(`“${b.coldopen}”` + (b.source ? ` · ${b.source}` : ""))); }
-      els.push(label("Aria asks")); els.push(P(b.asks, { style: "Ask" }));
+      if (b.asks && b.asks !== b.title) { els.push(label("Aria asks")); els.push(P(b.asks, { style: "Ask" })); }
       els.push(label("Ary reads")); b.lines.forEach((l) => els.push(line(l)));
+      (b.variants || []).forEach((v) => { els.push(label(v.label)); v.lines.forEach((l) => els.push(line(l))); });
+      if (b.hooks && b.hooks.length) { els.push(label("More cold opens")); b.hooks.forEach((h) => els.push(bullet("\u201c" + h + "\u201d", "Cue"))); }
       if (b.zh) { els.push(label("中文提示")); els.push(zh(b.zh)); }
       if (b.fills && b.fills.length) { els.push(label("1688 fills in")); b.fills.forEach((f) => els.push(bullet(f, "Cue"))); }
       break;
